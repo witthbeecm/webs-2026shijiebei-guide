@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界杯 · 日常翻阅 · 故事从查询开始</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f3f5f7;
+            color: #1e2a3a;
+            line-height: 1.65;
+            padding: 2rem 1rem;
+        }
+
+        .page-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 卡片式容器，分区装载 */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e3e8ef;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+            padding: 2rem 2.2rem;
+            margin-bottom: 2rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04), 0 1px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        /* hero 开场 */
+        .hero {
+            text-align: left;
+            padding: 2.8rem 2.2rem;
+            background: #fafbfc;
+            border-bottom: 1px solid #eef1f6;
+        }
+
+        .hero p:first-child {
+            font-size: 1.2rem;
+            letter-spacing: 0.3px;
+            color: #2f4057;
+            border-left: 4px solid #b4c8e8;
+            padding-left: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero .opening {
+            font-size: 1.15rem;
+            color: #1a273a;
+            max-width: 640px;
+        }
+
+        .hero .opening strong {
+            font-weight: 600;
+            color: #1d3557;
+        }
+
+        /* 承接段落 / 故事延续 */
+        .story-block p {
+            margin-bottom: 1.2rem;
+        }
+
+        .story-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        .story-em {
+            display: block;
+            margin-top: 1.5rem;
+            font-style: normal;
+            color: #3d5670;
+            font-weight: 450;
+            border-top: 1px solid #eaeef5;
+            padding-top: 1.5rem;
+        }
+
+        /* 特点列表 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed #e6ecf2;
+        }
+
+        .feature-item:last-child,
+        .feature-item:nth-last-child(2):nth-child(odd) {
+            border-bottom: none;
+        }
+
+        .feature-marker {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #7f96b3;
+            border-radius: 1px;
+            margin-top: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-text strong {
+            color: #1d3557;
+            font-weight: 550;
+        }
+
+        /* 场景 & 提示卡片 */
+        .scene-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-top: 0.6rem;
+        }
+
+        .scene-block {
+            flex: 1 1 200px;
+            background: #f8faff;
+            padding: 1.2rem 1.4rem;
+            border-radius: 16px;
+            border: 1px solid #e7edf6;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+        }
+
+        .scene-block .scene-head {
+            font-weight: 530;
+            color: #1b2d44;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .scene-block p {
+            font-size: 0.95rem;
+            color: #2b3f57;
+        }
+
+        .tip-note {
+            background: #f0f4fc;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: #1d3557;
+            border: 1px solid #dce5f0;
+        }
+
+        /* FAQ 摘要区 */
+        .faq-mini {
+            list-style: none;
+            padding: 0;
+            margin: 0.8rem 0 0 0;
+        }
+
+        .faq-mini li {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .faq-mini li:last-child {
+            border-bottom: none;
+        }
+
+        .faq-q {
+            font-weight: 520;
+            color: #1f324b;
+        }
+
+        .faq-a {
+            margin-top: 0.25rem;
+            color: #314a64;
+            font-size: 0.95rem;
+        }
+
+        .faq-a a {
+            color: #1f4b7a;
+            text-decoration: none;
+            border-bottom: 1px dotted #a9c1de;
+            transition: border-bottom 0.15s;
+        }
+
+        .faq-a a:hover {
+            border-bottom: 1px solid #1f4b7a;
+        }
+
+        /* 温和结尾 */
+        .gentle-close {
+            padding: 1.8rem 2.2rem;
+            background: #f8fafd;
+            text-align: center;
+            border: 1px solid #e2e9f3;
+        }
+
+        .gentle-close p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #364e6b;
+        }
+
+        .gentle-close small {
+            color: #6680a0;
+            display: block;
+            margin-top: 1rem;
+        }
+
+        /* 响应式细节 */
+        @media (max-width: 640px) {
+            body { padding: 1.2rem 0.8rem; }
+            .card { padding: 1.5rem 1.2rem; }
+            .hero { padding: 2rem 1.2rem; }
+            .feature-grid { grid-template-columns: 1fr; gap: 0.2rem; }
+            .feature-item:nth-last-child(2):nth-child(odd) { border-bottom: 1px dashed #e6ecf2; }
+            .scene-grid { flex-direction: column; }
+            .faq-mini li { padding: 0.8rem 0; }
+            .gentle-close { padding: 1.5rem 1.2rem; }
+        }
+
+        @media (max-width: 420px) {
+            .hero .opening { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+
+    <!-- 开场短句 · hero -->
+    <div class="card hero">
+        <p>⚽ 打开浏览器，输入一个名字，或者一个年份。</p>
+        <div class="opening">
+            很多时候，我们只是想确认某个进球、某场小组赛、某段记忆里的哨声。<br>
+            然后发现，<strong>「世界杯」</strong>这三个字，连接着太多可以随时翻阅的故事。
+        </div>
+    </div>
+
+    <!-- 承接段落 · 从日常查询到对照延伸 -->
+    <div class="card story-block">
+        <p>朋友发来一张老照片，问“那年决赛是不是在七月？” 于是你开始翻赛历、比时间、查阵容。这样的场景大概每个球迷都不陌生——不是要去哪片看台，而是想找回一个准确的时间坐标，或是一组冷静的数据。</p>
+        <p>从小组抽签到淘汰赛路径，从单届射手到历史总榜，这些内容慢慢变成你个人笔记本里的索引。有时只是为了验证一句解说词，有时则是为了写一封给孩子的“足球简史”。</p>
+        <span class="story-em">—— 查询，从来不是终点。它更像一根线，把散落的比赛日重新缝起来。</span>
+    </div>
+
+    <!-- 特点列表 · 卡片分区 -->
+    <div class="card">
+        <h2 style="font-weight: 530; font-size: 1.2rem; color: #1d3557; margin-bottom: 1rem;">翻阅时常见的特点</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <span class="feature-marker"></span>
+                <span class="feature-text"><strong>多届对照</strong> · 同一支球队在不同年代的面貌，从阵型到核心球员，逐届罗列。</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-marker"></span>
+                <span class="feature-text"><strong>数据稳定</strong> · 比赛结果、射手、助攻等核心信息经过多轮校对，适合长期引用。</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-marker"></span>
+                <span class="feature-text"><strong>标签化检索</strong> · 按年份、大洲、球场或经典战役归类，减少重复翻页。</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-marker"></span>
+                <span class="feature-text"><strong>延伸线索</strong> · 每届页面常配有背景说明、当届规则变化或趣闻录，方便横向对比。</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 场景 + 提示混合 -->
+    <div class="card">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0.4rem 1.5rem; margin-bottom: 0.2rem;">
+            <h2 style="font-weight: 530; font-size: 1.2rem; color: #1d3557;">谁会在这些内容里停留</h2>
+            <span class="tip-note"> ⏳ 一个傍晚或一杯咖啡的时间</span>
+        </div>
+        <div class="scene-grid">
+            <div class="scene-block">
+                <div class="scene-head">📋 赛前备忘录</div>
+                <p>下周和朋友约了看录像，先查一下那届比赛的小组积分与净胜球，顺便看看有没有冷门结果。</p>
+            </div>
+            <div class="scene-block">
+                <div class="scene-head">📚 延伸阅读</div>
+                <p>读到某篇关于战术演变的文章，里面提及1986年与2010年的某种相似性——点开对应届目，自己对比。</p>
+            </div>
+            <div class="scene-block">
+                <div class="scene-head">🧩 拼图式整理</div>
+                <p>孩子在手工课上要做“世界杯历史时间轴”，你帮忙整理每届的会徽、举办国与冠军，顺便补充半决赛比分。</p>
+            </div>
+        </div>
+        <p style="margin-top: 1.4rem; font-size: 0.95rem; color: #2f4866;">这些页面不追求秒回一切，但希望你每次回来都能找到上次折角的那一页。</p>
+    </div>
+
+    <!-- FAQ 摘要 -->
+    <div class="card">
+        <h2 style="font-weight: 530; font-size: 1.2rem; color: #1d3557; margin-bottom: 0.8rem;">常见疑问 · 短摘</h2>
+        <ul class="faq-mini">
+            <li>
+                <div class="faq-q">🔹 怎样快速找到某届预选赛的积分表？</div>
+                <div class="faq-a">在对应年份页面内，通常设有“预选赛”独立分区，按大洲筛选即可。也可以直接搜索相关词条。</div>
+            </li>
+            <li>
+                <div class="faq-q">🔹 历年最佳射手榜单会实时更新吗？</div>
+                <div class="faq-a">历史数据已固定。当届赛事进行时会根据官方统计做阶段更新，但最终以赛事结束后校准版为准。</div>
+            </li>
+            <li>
+                <div class="faq-q">🔹 想找一个中立的信息起点，该从哪里开始？</div>
+                <div class="faq-a">不妨试试 <a href="https://webs-2026shijiebei.com">世界杯</a> —— 它像一本逐年增厚的笔记，你可以从最近的届次往回翻，也可以从经典决赛进入。</div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 温和结尾 -->
+    <div class="card gentle-close">
+        <p>页面背后的内容，多数来自公开的赛事档案、赛后报告和不少人的默默整理。它不制造喧嚣，只负责把一届又一届的比赛安安静静地放在那里。</p>
+        <p style="margin-top: 1rem;">如果你恰好路过，翻到某一年、某个进球、某张红牌——希望它和你记忆里的画面，温差不大。</p>
+        <small>— 2026 届目已在路上，赛历与场馆信息正随官方公告逐步更新 —</small>
+    </div>
+
+</div>
+</body>
+</html>
